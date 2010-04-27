@@ -1,0 +1,19 @@
+# Redis configuration file example
+daemonize yes
+pidfile /var/run/redis.pid
+port <%= @port %>
+bind <%= @bind_address %>
+timeout <%= @timeout %>
+save 900 1
+save 300 10
+save 60 10000
+dbfilename redis_state.rdb
+dir <%= @basedir %>
+loglevel <%= @loglevel %>
+logfile <%= @logfile %>
+databases 16
+maxclients 128
+maxmemory 100000000
+glueoutputbuf yes
+shareobjects <%= @sharedobjects %>
+shareobjectspoolsize 1024 
