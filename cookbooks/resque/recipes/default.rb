@@ -32,6 +32,12 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
       })
     end
 
+    execute "restart-monit-resque" do
+      command "/usr/bin/monit reload && " +
+              "/usr/bin/monit restart all -g resque_#{app_name}"
+      action :run
+    end
+
     bash "monit-reload-restart" do
        user "root"
        code "monit reload && monit"
