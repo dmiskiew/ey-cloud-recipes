@@ -38,11 +38,6 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
       action :run
     end
 
-    bash "monit-reload-restart" do
-       user "root"
-       code "monit reload && monit"
-    end
-
   end
 
 end
