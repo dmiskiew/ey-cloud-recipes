@@ -4,10 +4,10 @@
 #
 
 # Set your application name here
-appname = "appname"
+appname = "seatsmart"
 
 # Uncomment the flavor of sphinx you want to use
-#flavor = "thinking_sphinx"
+flavor = "thinking_sphinx"
 #flavor = "ultrasphinx"
 
 # If you want to have scheduled reindexes in cron, enter the minute
@@ -17,7 +17,7 @@ appname = "appname"
 # If you don't want scheduled reindexes, just leave this commented.
 #
 # Uncommenting this line as-is will reindex once every 10 minutes.
-# cron_interval = 10
+# cron_interval = 45
 
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
 
@@ -70,8 +70,7 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
       variables({
         :app_name => app_name,
         :user => node[:owner_name],
-        :flavor => flavor.eql?("thinking_sphinx") ? "thinkingsphinx" : flavor,
-        :mem_limit => 32
+        :flavor => flavor.eql?("thinking_sphinx") ? "thinkingsphinx" : flavor
       })
     end
 
@@ -100,6 +99,12 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
     end
 
     execute "monit quit"
+
+    execute "restart-monit-sphinx" do
+      command "/usr/bin/monit reload && " +
+              "/usr/bin/monit restart all -g sphinx_#{app_name}"
+      action :run
+    end
 
     if cron_interval
       cron "sphinx index" do
