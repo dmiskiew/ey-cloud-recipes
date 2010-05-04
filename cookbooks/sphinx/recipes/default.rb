@@ -100,12 +100,6 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
 
     execute "monit quit"
 
-    execute "restart-monit-sphinx" do
-      command "/usr/bin/monit reload && " +
-              "/usr/bin/monit restart all -g sphinx_#{app_name}"
-      action :run
-    end
-
     if cron_interval
       cron "sphinx index" do
         action  :create
